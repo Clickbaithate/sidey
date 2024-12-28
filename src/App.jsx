@@ -11,7 +11,8 @@ function App() {
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+    camera.position.z = 15;
+    camera.position.y = 2;
 
     const renderer = new THREE.WebGLRenderer();
     renderer.shadowMap.enabled = true; 
@@ -22,12 +23,12 @@ function App() {
     const controls = new OrbitControls(camera, renderer.domElement);
 
     // Cube
-    const cube = new Box({ width: 1, height: 1, depth: 1, velocity: {x: 0, y: -0.01, z: 0} });
+    const cube = new Box({ width: 1, height: 1, depth: 1, color: '#01ffee', position: { x: 0, y: 0, z: 9.5 } });
     cube.castShadow = true;
     scene.add(cube);
 
     // Adding platform
-    const ground = new Box({ width: 5, height: 0.5, depth: 20, color: '#0000ff', position: {x: 0, y: -2, z: 0} });
+    const ground = new Box({ width: 5, height: 0.5, depth: 20, color: '#0000ff', position: { x: 0, y: -1, z: 0 } });
     ground.receiveShadow = true; 
     scene.add(ground);
 
@@ -37,6 +38,17 @@ function App() {
     light.position.y = 5;
     light.castShadow = true;
     scene.add(light);
+
+    window.addEventListener('keydown', (event) => {
+      switch(event.code) {
+        case 'KeyA':
+          cube.moveLeft();
+          break;
+        case 'KeyD':
+          cube.moveRight();
+          break;
+      }
+    });
 
     // Animation loop
     const animate = () => {
