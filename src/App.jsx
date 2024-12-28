@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { Box } from './objects/Box';
 
 function App() {
   
@@ -13,7 +14,7 @@ function App() {
     camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer();
-    renderer.shadowMap.enabled = true; // 1 of 4 settings to allow shadows
+    renderer.shadowMap.enabled = true; 
     renderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(renderer.domElement);
 
@@ -21,45 +22,26 @@ function App() {
     const controls = new OrbitControls(camera, renderer.domElement);
 
     // Cube
-    // Dimensions of cube
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    // Colors of each face of the cube
-    // These materials allow for lighting
-    const material = [
-      new THREE.MeshStandardMaterial({ color: 0xff0000 }),
-      new THREE.MeshStandardMaterial({ color: 0x00ff00 }),
-      new THREE.MeshStandardMaterial({ color: 0x0000ff }),
-      new THREE.MeshStandardMaterial({ color: 0xffff00 }),
-      new THREE.MeshStandardMaterial({ color: 0xff00ff }),
-      new THREE.MeshStandardMaterial({ color: 0x00ffff })
-    ];
-    // Creating the cube
-    const cube = new THREE.Mesh(geometry, material);
-    cube.castShadow = true; // 2 of 4, allow cube to cast shadow
-    // Adding the cube
+    const cube = new Box({ width: 1, height: 1, depth: 1, velocity: {x: 0, y: -0.01, z: 0} });
+    cube.castShadow = true;
     scene.add(cube);
 
     // Adding platform
-    const ground = new THREE.Mesh(
-      new THREE.BoxGeometry(5, 0.5, 10), 
-      new THREE.MeshStandardMaterial({ color: 0x0000ff })
-    );
-    ground.position.y = -2;
-    ground.receiveShadow = true; // 3 of 4, where the shadow will be casted to
+    const ground = new Box({ width: 5, height: 0.5, depth: 20, color: '#0000ff', position: {x: 0, y: -2, z: 0} });
+    ground.receiveShadow = true; 
     scene.add(ground);
 
     // Adding light
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.z = 3;
     light.position.y = 5;
-    light.castShadow = true; // 4 of 4, allow light to cast shadows
+    light.castShadow = true;
     scene.add(light);
 
     // Animation loop
     const animate = () => {
       requestAnimationFrame(animate);
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.05;
+      cube.update(ground);
       renderer.render(scene, camera);
     };
     animate();
