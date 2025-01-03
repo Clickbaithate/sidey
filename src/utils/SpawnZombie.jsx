@@ -8,6 +8,7 @@ export default class Zombie {
     this.loader = new GLTFLoader();
     this.health = health;
     this.animations = [];
+    this.isAlive = true;
   }
 
   loadModel() {

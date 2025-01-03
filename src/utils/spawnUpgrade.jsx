@@ -17,7 +17,9 @@ export default class Upgrade {
 
           // Set initial position, scale, and rotation
           this.model.position.set(Math.random() * 50, -15, -700);
-          this.model.scale.set(0.2, 0.2, 0.2);
+          this.model.scale.set(15, 15, 15);
+          this.model.rotation.x = Math.PI * 1.5;
+          this.model.rotation.y = Math.PI * 1.5;
           this.model.rotation.z = Math.PI * 1.5;
 
           // Resolve the promise with the upgrade instance
